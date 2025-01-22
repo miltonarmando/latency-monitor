@@ -40,7 +40,7 @@ A robust and professional latency monitoring application designed to detect and 
    npm install
    ```
 3. Configure environment variables:
-   - Create a `.env` file in the `backend` directory:
+   - Create a `.env` file in the `root` directory of project:
      ```plaintext
      MONITOR_INTERVAL=60000
      TARGET_HOST=example.com
