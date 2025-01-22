@@ -4,7 +4,8 @@ require("dotenv").config({ path: "../.env" }); // Load environment variables fro
 module.exports = {
   monitor: {
     interval: process.env.MONITOR_INTERVAL, // Interval (in milliseconds) for monitoring latency
-    targetHost: process.env.TARGET_HOST, // Target host to monitor (e.g., an IP address or domain)
+    targetHost1: process.env.TARGET_HOST1, // Target host to monitor (e.g., an IP address or domain)
+    targetHost2: process.env.TARGET_HOST2, // Target host to monitor (e.g., an IP address or domain)
     latencyThreshold: process.env.LATENCY_THRESHOLD, // Threshold for latency (in milliseconds) to trigger alerts
   },
   whatsapp: {

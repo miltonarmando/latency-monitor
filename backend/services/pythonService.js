@@ -2,15 +2,15 @@ const { spawn } = require("child_process"); // Import child_process for spawning
 const logger = require("./loggingService"); // Import logging service
 
 /**
- * Measure latency by invoking a Python script.
+ * Measure latency for a given host by invoking a Python script.
  * 
- * @param {string} targetHost - The host for which to measure latency.
+ * @param {string} host - The host for which to measure latency.
  * @returns {Promise<Object>} - A promise that resolves with the result of the latency measurement.
  */
-async function measureLatency(targetHost) {
+async function measureLatency(host) {
   return new Promise((resolve, reject) => {
     // Spawn a Python process to execute the latency measurement script
-    const process = spawn("python3", ["../scripts/measure_latency.py", targetHost]);
+    const process = spawn("python3", ["../scripts/measure_latency.py", host]);
 
     let data = ""; // Accumulator for stdout data
 
@@ -37,5 +37,25 @@ async function measureLatency(targetHost) {
   });
 }
 
-// Export the measureLatency function for use in other modules
-module.exports = { measureLatency };
+/**
+ * Measure latency for two hosts and return their results.
+ * 
+ * @param {string} host1 - The first host to measure latency for.
+ * @param {string} host2 - The second host to measure latency for.
+ * @returns {Promise<Object>} - A promise that resolves with combined results for both hosts.
+ */
+async function measureLatencyForTwoHosts(host1, host2) {
+  try {
+    // Measure latency for both hosts concurrently
+    const [result1, result2] = await Promise.all([measureLatency(host1), measureLatency(host2)]);
+    return {
+      results: [result1, result2]
+    };
+  } catch (err) {
+    logger.error(`Error measuring latency for hosts: ${err}`);
+    throw err; // Propagate error to the caller
+  }
+}
+
+// Export the measureLatency and measureLatencyForTwoHosts functions
+module.exports = { measureLatency, measureLatencyForTwoHosts };

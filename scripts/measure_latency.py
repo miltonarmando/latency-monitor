@@ -10,21 +10,31 @@ def measure_latency(host):
         
         # If no response, return packet loss information
         if latency is None:
-            return {"latency": None, "packet_loss": True}
+            return {"host": host, "latency": None, "packet_loss": True}
         
         # If a response is received, return the latency and packet loss as False
-        return {"latency": latency, "packet_loss": False}
+        return {"host": host, "latency": latency, "packet_loss": False}
     except Exception as e:
         # If an error occurs, return the error message and packet loss as True
-        return {"error": str(e), "packet_loss": True}
+        return {"host": host, "error": str(e), "packet_loss": True}
 
 # Main block to run the function if executed directly
 if __name__ == "__main__":
-    # Get the host address from command line arguments
-    host = sys.argv[1]
+    # Ensure at least two hosts are provided as command line arguments
+    if len(sys.argv) < 3:
+        print("Usage: python script.py <host1> <host2>")
+        sys.exit(1)
     
-    # Call the measure_latency function and store the result
-    result = measure_latency(host)
+    # Get the host addresses from command line arguments
+    host1 = sys.argv[1]
+    host2 = sys.argv[2]
     
-    # Print the result as a JSON formatted string
-    print(json.dumps(result))
+    # Call the measure_latency function for both hosts
+    result1 = measure_latency(host1)
+    result2 = measure_latency(host2)
+    
+    # Combine the results into a single JSON object
+    combined_results = {"results": [result1, result2]}
+    
+    # Print the combined results as a JSON formatted string
+    print(json.dumps(combined_results, indent=4))

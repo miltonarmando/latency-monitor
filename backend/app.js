@@ -8,11 +8,15 @@ const { waitForAuthentication, sendWhatsAppMessage } = require("./services/whats
     await waitForAuthentication();
 
     // Example: Send a test message to WhatsApp
-    await sendWhatsAppMessage("Hello, this is a test!", test.testChatId);
+    await sendWhatsAppMessage("✅ WhatsApp monitoring service is now online!", test.testChatId);
 
-    // Start monitoring latency at the defined intervals
+    // Start monitoring latency for both hosts at the defined intervals
     setInterval(async () => {
-      await monitorLatency(); // Call the latency monitoring function
+      try {
+        await monitorLatency(); // Call the latency monitoring function
+      } catch (err) {
+        console.error("Error during latency monitoring:", err.message);
+      }
     }, monitor.interval); // Use the interval set in the config
   } catch (err) {
     // Handle fatal application errors
